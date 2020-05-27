@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-bp = Blueprint('collaboration', __name__)
+bp = Blueprint('collaboration', __name__, template_folder='templates')
 
-from app.collaboration import routes, models
+from . import routes, models

@@ -1,11 +1,12 @@
 from flask import render_template, flash, redirect, url_for, request, abort, current_app, session, Response
 from flask_login import current_user, login_required
 
-from app.collaboration import bp, models
+from . import bp, models
+from .models import Firepad, Collab
 
 from app import db
 from datetime import datetime
-from app.models import Firepad, Collab, User, Enrollment, Turma
+from app.models import User, Enrollment, Turma
 import app.models
 
 
@@ -14,9 +15,9 @@ import app.models
 @login_required
 def collaboration_index():
 	# Get list of owned pads and pads we are collaborating on
-	firepads = app.collaboration.models.get_user_owned_firepads()
-	collabs = app.collaboration.models.get_user_collaborating_firepads()
-	return render_template('collaboration/collaboration_index.html', firepads = firepads, collabs = collabs)
+	firepads = models.get_user_owned_firepads()
+	collabs = models.get_user_collaborating_firepads()
+	return render_template('collaboration_index.html', firepads = firepads, collabs = collabs)
 
 
 # Create new firepad as owner
@@ -24,7 +25,7 @@ def collaboration_index():
 @login_required
 def create_new_firepad():
 	# Create a new firepad in the DB and redirect to the newly created pad
-	firepad = app.collaboration.models.create_new_firepad()
+	firepad = models.create_new_firepad()
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad.id))
 
 
@@ -32,15 +33,15 @@ def create_new_firepad():
 @bp.route("/<firepad_id>")
 @login_required
 def collaborate(firepad_id):
-	if app.collaboration.models.check_if_user_has_access_to_firepad(firepad_id, current_user.id):
+	if models.check_if_user_has_access_to_firepad(firepad_id, current_user.id):
 		is_owner = app.models.is_admin(current_user.username) or Firepad.query.get(firepad_id).owner_id == current_user.id
-		owner = app.collaboration.models.get_firepad_owner_user_object(firepad_id)
+		owner = models.get_firepad_owner_user_object(firepad_id)
 		collaborators = db.session.query(
 			Collab, User).join(
 			User, Collab.user_id == User.id).filter(
 			Collab.firepad_id==firepad_id).all()
 		
-		return render_template('collaboration/firepad.html',
+		return render_template('firepad.html',
 							api_key = current_app.config['FIREBASE_API_KEY'],
 							auth_domain = current_app.config['FIREBASE_AUTH_DOMAIN'],
 							database_url = current_app.config['FIREBASE_DATABASE_URL'],
@@ -78,7 +79,7 @@ def find_user(firepad_id):
 			for student in class_list: classmates.append(student)
 			
 		# Display searchable table with username and button to add user
-	return render_template('collaboration/find_user.html', classmates = classmates, firepad_id = firepad_id)
+	return render_template('find_user.html', classmates = classmates, firepad_id = firepad_id)
 
 # Method to add new user to a pad
 @bp.route("/add/<user_id>/<firepad_id>")
