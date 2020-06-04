@@ -2,7 +2,7 @@
 
 
   <!-- Firebase -->
-  <script src="/static/js/firebase.js"></script>
+  <script src="{{url_for ('collaboration.js', filename = 'firebase.js')}}"></script>
 
   <!-- CodeMirror -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
@@ -10,13 +10,11 @@
 
   <!-- Firepad -->
   <link rel="stylesheet" href="/static/css/firepad.css" />
-  <script src="/static/js/firepad.min.js"></script>
-
+  <script src="{{url_for ('collaboration.js', filename = 'firepad.min.js')}}"></script>
   <!-- Include example userlist script / CSS.
        Can be downloaded from: https://github.com/firebase/firepad/tree/master/examples/ -->
-  
   <link rel="stylesheet" href="/static/css/firepad-userlist.css" />
-  
+
   
   <script>
     var FirepadUserList = (function() {

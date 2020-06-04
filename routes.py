@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, abort, current_app, session, Response
+from flask import render_template, flash, redirect, url_for, request, abort, current_app, session, Response, send_from_directory
 from flask_login import current_user, login_required
 
 from . import bp, models
@@ -9,6 +9,12 @@ from datetime import datetime
 from app.models import User, Enrollment, Turma
 import app.models
 
+# Render this blueprint's javascript
+@bp.route("/js/<filename>")
+@login_required
+def js(filename):
+	filepath = 'js/' + filename
+	return render_template(filepath) # is send_from_directory('/templates/js/', path) a safer approach?
 
 # Collaboration home page
 @bp.route("/")
