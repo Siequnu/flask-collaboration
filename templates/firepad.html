@@ -267,13 +267,14 @@
 <br>
 <div class="container">
 <div class="row">
-  <div class="col-md-4">
-    <h1><i class="fa fa-users"></i> Collaboration {{firepad_id}}</h1>
+  <div class="col-6">
+    <h2><i class="fa fa-users"></i> Collaboration {{firepad_id}}</h2>
     
     
   </div>
+
   {% if is_owner == True %}
-  <div class="col-md-2">
+  <div class="col-2">
      <a href="{{url_for('collaboration.find_user', firepad_id = firepad_id)}}" 
      <button class="btn btn-secondary">
   <i class="fa fa-user-plus">
@@ -284,7 +285,7 @@
 {% endif %}
 
 {% if is_admin == True %}
-<div class="col-md-2">
+<div class="col-2">
   <div class="dropdown">
   <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="fa fa-users-group">
@@ -300,7 +301,7 @@
 
 {% endif %}
 
-<div class="col-md-3">
+<div class="col-2">
   
   <div class="dropdown">
   <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -332,7 +333,7 @@
   
 </div>
 
-
+<br><br>
 </div>
 
   <style>
@@ -349,6 +350,8 @@
   </style>
 
 <body onload="init()">
+  <br>
+  <br>
   <div id="userlist"></div>
   <div id="firepad"></div>
   
