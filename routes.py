@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, abort, current_app, session, Response, send_from_directory
+from flask import render_template, flash, redirect, url_for, request, abort, current_app, session, Response, send_from_directory, make_response
 from flask_login import current_user, login_required
 
 from . import bp, models
@@ -14,7 +14,9 @@ import app.models
 @login_required
 def js(filename):
 	filepath = 'js/' + filename
-	return render_template(filepath) # is send_from_directory('/templates/js/', path) a safer approach?
+	response = make_response(render_template(filepath))
+	response.headers['Content-type'] = 'text/javascript'
+	return response
 
 # Collaboration home page
 @bp.route("/")
@@ -36,6 +38,53 @@ def create_new_firepad():
 
 
 # Display a firepad and collaborate online
+from flask_talisman import Talisman, ALLOW_FROM
+from app import talisman
+# Build temporary expanded content security policy
+temp_csp = {
+        'default-src': [
+			'*',
+			'\'self\'',
+            '\'unsafe-inline\'',
+            'cdnjs.cloudflare.com',
+            'fonts.googleapis.com',
+            'fonts.gstatic.com',
+            '*.w3.org',
+            'kit-free.fontawesome.com'
+        ],
+        'img-src': '*',
+		'connect-src': '*',
+		'font-src': [
+			'*',
+			'\'self\'',
+            'data:',
+			'\'unsafe-inline\'',
+			'\'unsafe-eval\'',
+            'ajax.googleapis.com',
+            '*.fontawesome.com'
+			'code.jquery.com',
+            'cdn.jsdelivr.net',
+            'cdnjs.cloudflare.com',
+        ],
+		'child-src': '*',
+        'style-src': [
+            '*',
+            '\'self\'',
+            '\'unsafe-inline\'',
+            '\'unsafe-eval\'',
+        ],
+        'script-src': [
+            '*',
+			'\'self\'',
+            '\'unsafe-inline\'',
+			'\'unsafe-eval\'',
+            'ajax.googleapis.com',
+            'code.jquery.com',
+            'cdn.jsdelivr.net',
+            'cdnjs.cloudflare.com',
+        ]
+    }
+@talisman(content_security_policy=temp_csp)
 @bp.route("/<firepad_id>")
 @login_required
 def collaborate(firepad_id):
