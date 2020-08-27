@@ -9,14 +9,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
 
 <!-- Firepad -->
-<link nonce="{{ csp_nonce() }}" rel="stylesheet" href="/static/css/firepad.css" />
+<link   rel="stylesheet" href="/static/css/firepad.css" />
 <script src="{{url_for ('collaboration.js', filename = 'firepad.min.js')}}"></script>
 <!-- Include example userlist script / CSS.
        Can be downloaded from: https://github.com/firebase/firepad/tree/master/examples/ -->
 <link rel="stylesheet" href="/static/css/firepad-userlist.css" />
 
 
-<script type="text/javascript" nonce="{{ csp_nonce() }}">
+<script type="text/javascript"  >
   var FirepadUserList = (function () {
     function FirepadUserList(ref, place, userId, displayName) {
       if (!(this instanceof FirepadUserList)) {
