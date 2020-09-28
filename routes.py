@@ -96,16 +96,17 @@ def collaborate(firepad_id):
 			User, Collab.user_id == User.id).filter(
 			Collab.firepad_id==firepad_id).all()
 		
-		return render_template('firepad.html',
-							api_key = current_app.config['FIREBASE_API_KEY'],
-							auth_domain = current_app.config['FIREBASE_AUTH_DOMAIN'],
-							database_url = current_app.config['FIREBASE_DATABASE_URL'],
-							collaborators = collaborators,
-							owner = owner,
-							is_owner = is_owner,
-							is_admin = app.models.is_admin(current_user.username),
-							classes = Turma.query.all(),
-							firepad_id = firepad_id)
+		return render_template(
+			'firepad.html',
+			api_key = current_app.config['FIREBASE_API_KEY'],
+			auth_domain = current_app.config['FIREBASE_AUTH_DOMAIN'],
+			database_url = current_app.config['FIREBASE_DATABASE_URL'],
+			collaborators = collaborators,
+			owner = owner,
+			is_owner = is_owner,
+			is_admin = app.models.is_admin(current_user.username),
+			classes = app.classes.models.get_teacher_classes_from_teacher_id (current_user.id),
+			firepad_id = firepad_id)
 	else:
 		flash ('You do not have permission to access this pad. Please ask the owner to add you as a collaborator', 'info')
 		return redirect (url_for('collaboration.collaboration_index'))
@@ -120,6 +121,7 @@ def find_user(firepad_id):
 		classmates = db.session.query(
 				User, Enrollment).join(
 				Enrollment, User.id == Enrollment.user_id).all()
+		classmates = app.classes.models.get_teacher_classes_with_students_from_teacher_id (current_user.id)
 	else:
 		
 		# If student, get list of students from current class
@@ -134,7 +136,11 @@ def find_user(firepad_id):
 			for student in class_list: classmates.append(student)
 			
 		# Display searchable table with username and button to add user
-	return render_template('find_user.html', classmates = classmates, firepad_id = firepad_id)
+	print (classmates)
+	return render_template(
+		'find_user.html', 
+		classmates = classmates, 
+		classesfirepad_id = firepad_id)
 
 # Method to add new user to a pad
 @bp.route("/add/<user_id>/<firepad_id>")

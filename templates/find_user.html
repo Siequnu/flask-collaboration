@@ -41,19 +41,43 @@
         </tr>
       </thead>
       <tbody id="searchableTable">
-        {% for user, enrollment in classmates %}
-        <tr>
-          <td>{{user.username}}</td>
-          <td>
-            <a href="{{url_for('collaboration.add_user', user_id = user.id, firepad_id = firepad_id)}}" <button
-              class="btn btn-secondary">
-              <i class="fa fa-plus-circle">
-              </i> Add to pad
-              </button>
-            </a>
-          </td>
-        </tr>
-        {% endfor %}
+        {% if current_user.is_admin == True %}
+        
+          {% for turma in classmates %}
+            {% for student in turma.students %}
+
+            <tr>
+              <td>{{student.username}}</td>
+              <td>
+                <a href="{{url_for('collaboration.add_user', user_id = student.id, firepad_id = firepad_id)}}"><button
+                  class="btn btn-secondary">
+                  <i class="fa fa-plus-circle">
+                  </i> Add to pad
+                  </button>
+                </a>
+              </td>
+            </tr>
+
+            {% endfor %}
+          {% endfor %}
+        
+        {% else %}      
+        
+          {% for user, enrollment in classmates %}
+          <tr>
+            <td>{{user.username}}</td>
+            <td>
+              <a href="{{url_for('collaboration.add_user', user_id = user.id, firepad_id = firepad_id)}}"><button
+                class="btn btn-secondary">
+                <i class="fa fa-plus-circle">
+                </i> Add to pad
+                </button>
+              </a>
+            </td>
+          </tr>
+          {% endfor %} 
+
+        {% endif %}
       </tbody>
       <tfoot>
         <tr>
