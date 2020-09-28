@@ -275,7 +275,7 @@
 
     {% if is_owner == True %}
     <div class="col-2">
-      <a href="{{url_for('collaboration.find_user', firepad_id = firepad_id)}}" <button class="btn btn-secondary">
+      <a href="{{url_for('collaboration.find_user', firepad_id = firepad_id)}}"><button class="btn btn-secondary">
         <i class="fa fa-user-plus">
         </i> Add collaborator
         </button>
@@ -361,6 +361,8 @@
     right: 40px;
     height: auto;
   }
+
+  .firepad-dropdown-menu {color: black;}
 </style>
 
 <body onload="init()">
