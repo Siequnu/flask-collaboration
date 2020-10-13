@@ -136,7 +136,6 @@ def find_user(firepad_id):
 			for student in class_list: classmates.append(student)
 			
 		# Display searchable table with username and button to add user
-	print (classmates)
 	return render_template(
 		'find_user.html', 
 		classmates = classmates, 
